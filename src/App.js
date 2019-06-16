@@ -24,8 +24,6 @@ class App extends React.Component {
 		movies.
 			then((data) => { // async (data) => { ...
 				return data.json();
-				// const movies = await data.json();
-				// console.log("DATA: ", movies);
 			}).then( (data) => {
 				this.setState({ moviesList: data });
 			}).
