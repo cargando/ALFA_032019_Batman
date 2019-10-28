@@ -17,6 +17,7 @@ class App extends React.Component {
 			moviesList: [], // список фильмов
 			watched: {},
 		}
+
 	}
 
 	componentDidMount() {
