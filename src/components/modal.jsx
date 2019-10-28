@@ -12,7 +12,7 @@ function Modal (props) {
 
 			<BM.Body>
 				{
-					props.children
+					props.renderBody()
 				}
 			</BM.Body>
 
@@ -26,6 +26,7 @@ Modal.propTypes = {
 	title: PropTypes.string,
 	children: PropTypes.element, //
 	onClose: PropTypes.func,
+	renderBody: PropTypes.func,
 };
 
 export default Modal;

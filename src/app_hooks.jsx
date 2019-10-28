@@ -77,6 +77,25 @@ const App = (props) => { // hook
 	};
 	console.log("VIEW = ", showModal)
 
+
+	const renderModalBody = () => {
+
+		const filtered = moviesList.filter((item) => item.show.id === viewId);
+		if (!filtered.length) {
+			return null;
+		}
+		console.log("FILTER", filtered)
+		const resultMs = Object.entries(filtered[0].show).map( (item, index) => {
+			const stringVal = typeof item[1] !== "object" ? item[1] : <em>Object</em>;
+			return <tr key={index}><td>{item[0]}</td><td>{ stringVal }</td></tr>
+		});
+		return (
+			<table>
+				<tbody>{resultMs}</tbody>
+			</table>)
+
+	}
+
 	return (
 		<div style={{display: "relative"}}>
 		<Container>
@@ -93,7 +112,11 @@ const App = (props) => { // hook
 			</Row>
 		</Container>
 			{
-				showModal && <Modal onClose={ handleCloseModal } title="Детали о выпуске" />
+				showModal && <Modal
+					onClose={ handleCloseModal }
+					title="Детали о выпуске"
+					renderBody={renderModalBody}
+				/>
 			}
 		</div>
 	);
