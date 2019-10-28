@@ -6,11 +6,15 @@ import {
 	Col,
 } from 'react-bootstrap';
 import MovieCard from "./components/card";
+import Modal from "./components/modal";
 
-const App = (props) => {
+const App = (props) => { // hook
 
+	const [ viewId, setViewId ] = useState(null);
+	const [ showModal, setShowModal ] = useState(false);
 	const [ moviesList, setMoviesList ] = useState([]);
 	const [ watched, setWatched ] = useState({});
+
 	// const [ userName, setUserName ] = useState("Василий Петров");
 	// const [ userAge, setUserAge ] = useState(26);
 
@@ -19,6 +23,7 @@ const App = (props) => {
 	//  watched: {},
 	// }
 	// setMoviesList => this.setState({moviesList:....})
+
 
 	useEffect(() => {
 			const movies = fetch('https://api.tvmaze.com/search/shows?q=batman');
@@ -33,7 +38,9 @@ const App = (props) => {
 				console.log("ERROR while loading data from url", e);
 				document.title = 'Ошибка соединения';
 			});
+
 	}, []); // , [userName, userAge]);
+
 
 
 	const handleChangeWatched = (id) => {
@@ -44,6 +51,15 @@ const App = (props) => {
 		});
 	};
 
+	const handleViewModal = (id) => {
+		setShowModal(true)
+		setViewId(id);
+	};
+
+	const handleCloseModal = (id) => {
+		setShowModal(false)
+		setViewId(null);
+	};
 
 	const renderCard = () => {
 		const ms = moviesList.map( (item) => {
@@ -51,6 +67,7 @@ const App = (props) => {
 				<React.Fragment key={ item.show.id }>
 					<MovieCard
 						onChange={ handleChangeWatched }
+						onViewMore={ handleViewModal }
 						data={ item.show }
 						watched={ watched[ String(item.show.id) ] } />
 					<br />
@@ -58,9 +75,10 @@ const App = (props) => {
 		});
 		return ms;
 	};
-
+	console.log("VIEW = ", showModal)
 
 	return (
+		<div style={{display: "relative"}}>
 		<Container>
 			<Row>
 				<Col xs={12}>
@@ -74,6 +92,10 @@ const App = (props) => {
 				</Col>
 			</Row>
 		</Container>
+			{
+				showModal && <Modal onClose={ handleCloseModal } title="Детали о выпуске" />
+			}
+		</div>
 	);
 
 };

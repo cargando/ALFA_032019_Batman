@@ -12,6 +12,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
+		// this.handleInputChange = this.handleInputChange.bind(this)
 
 		this.state = {
 			moviesList: [], // список фильмов
@@ -33,6 +34,11 @@ class App extends React.Component {
 			});
 	}
 
+	handleInputChange() {
+		// ... обработчик события
+		// this.setState({})
+	}
+
 	handleChangeWatched = (id) => {
 		this.setState((prevState) => {
 			const newVal = !prevState.watched[id];
@@ -50,7 +56,7 @@ class App extends React.Component {
 			return (
 				<React.Fragment key={ item.show.id }>
 					<MovieCard
-						onChange={ this.handleChangeWatched }
+						onChange={ this.handleChangeWatched  }
 						data={ item.show }
 						watched={ this.state.watched[ String(item.show.id) ] } />
 					<br />
@@ -63,6 +69,7 @@ class App extends React.Component {
 	render () {
 			console.log("Cnt = ", this.state.moviesList.length);
 	  return (
+
 	    <Container>
 		    <Row>
 			    <Col xs={12}>

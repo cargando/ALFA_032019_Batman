@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Row, Col } from 'react-bootstrap';
 
-const MovieCard = ({ onChange, data, watched = false }) => {
+const MovieCard = ({ onChange, onViewMore, data, watched = false }) => {
 	const {
 		image,
 		name,
@@ -25,13 +25,26 @@ const MovieCard = ({ onChange, data, watched = false }) => {
 				<Card.Text><small className="text-muted" dangerouslySetInnerHTML={ {__html: summary } } /> </Card.Text>
 				<Card.Text><small className="text-muted">{ premiered }</small> <br />
 					<small><a target="_blank" href={ url }>Visit movie page</a></small> <br /> <br/>
-					<Button
-						size="sm"
-						onClick={ () => { onChange(id) }}
-						variant={ watched ? "success" : "outline-secondary" }
-					>
-						{ watched ? "Смотрел" : "Не смотрел"}
-					</Button>
+					<Row>
+						<Col>
+							<Button
+								size="sm"
+								onClick={ () => { onChange(id) }}
+								variant={ watched ? "success" : "outline-secondary" }
+							>
+								{ watched ? "Смотрел" : "Не смотрел"}
+							</Button>
+						</Col>
+						<Col>
+							<Button
+								size="sm"
+								onClick={ () => { onViewMore(id) }}
+								variant="info"
+							>
+								Детали
+							</Button>
+						</Col>
+					</Row>
 				</Card.Text>
 			</Card.Body>
 		</Card>
