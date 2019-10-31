@@ -86,7 +86,7 @@ const App = (props) => { // hook
 		}
 		console.log("FILTER", filtered)
 		const resultMs = Object.entries(filtered[0].show).map( (item, index) => {
-			const stringVal = typeof item[1] !== "object" ? item[1] : <em>Object</em>;
+			const stringVal = typeof item[1] !== "object" ? item[1] : JSON.stringify(item[1]);
 			return <tr key={index}><td>{item[0]}</td><td>{ stringVal }</td></tr>
 		});
 		return (

@@ -1,0 +1,3 @@
+export const UPDATE_MOOVIE_LIST = "UPDATE_MOOVIE_LIST";
+export const UPDATE_WATCHED = "UPDATE_WATCHED";
+
