@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Loader from 'react-loader-spinner'
 import {
 	CardColumns,
 	Container,
@@ -6,14 +8,26 @@ import {
 	Col,
 } from 'react-bootstrap';
 import MovieCard from "./components/card";
-import Modal from "./components/modal";
+import Modal from "./components/modal_redux";
+import { getMovies, updateViewId } from './store/action_creators'
 
 const App = (props) => { // hook
 
 	const [ viewId, setViewId ] = useState(null);
 	const [ showModal, setShowModal ] = useState(false);
-	const [ moviesList, setMoviesList ] = useState([]);
+	// const [ moviesList, setMoviesList ] = useState([]);
+	const moviesList = useSelector( store => store.app.moviesList);
+	const isLoading = useSelector( store => store.app.isLoading);
+
+	// const GS = useSelector( store => { // можно дернуть useSelector за 1 проход и он вернет все нужные данные в виде одной переменной
+	// 	const retVal = {};
+	// 	retVal.isLoading = store.app.isLoading
+	// 	retVal.moviesList = store.app.moviesList
+	// 	return retVal;
+	// });
+
 	const [ watched, setWatched ] = useState({});
+	const dispatcher = useDispatch();
 
 	// const [ userName, setUserName ] = useState("Василий Петров");
 	// const [ userAge, setUserAge ] = useState(26);
@@ -23,23 +37,25 @@ const App = (props) => { // hook
 	//  watched: {},
 	// }
 	// setMoviesList => this.setState({moviesList:....})
-
-
 	useEffect(() => {
-			const movies = fetch('https://api.tvmaze.com/search/shows?q=batman');
-			movies.
-			then((data) => { // async (data) => { ...
-				return data.json();
-			}).then( (data) => {
-				setMoviesList(data);
-				document.title = 'Список фильмов про бэтмена';
-			}).
-			catch((e) => {
-				console.log("ERROR while loading data from url", e);
-				document.title = 'Ошибка соединения';
-			});
+		dispatcher(getMovies(null));
+	}, []);
 
-	}, []); // , [userName, userAge]);
+	// useEffect(() => {
+	// 		const movies = fetch('https://api.tvmaze.com/search/shows?q=batman');
+	// 		movies.
+	// 		then((data) => { // async (data) => { ...
+	// 			return data.json();
+	// 		}).then( (data) => {
+	// 			setMoviesList(data);
+	// 			document.title = 'Список фильмов про бэтмена';
+	// 		}).
+	// 		catch((e) => {
+	// 			console.log("ERROR while loading data from url", e);
+	// 			document.title = 'Ошибка соединения';
+	// 		});
+	//
+	// }, []); // , [userName, userAge]);
 
 
 
@@ -53,7 +69,7 @@ const App = (props) => { // hook
 
 	const handleViewModal = (id) => {
 		setShowModal(true)
-		setViewId(id);
+		dispatcher(updateViewId(id));
 	};
 
 	const handleCloseModal = (id) => {
@@ -77,6 +93,16 @@ const App = (props) => { // hook
 	};
 	console.log("VIEW = ", showModal)
 
+	const renderLoader = () => {
+		return (
+			<Loader
+				type="Plane"
+				color="#00BFFF"
+				height={100}
+				width={100}
+			/>
+		);
+	}
 
 	const renderModalBody = () => {
 
@@ -104,9 +130,9 @@ const App = (props) => { // hook
 					<h4>The Batman Movies (TV Show's):</h4>
 					<br />
 					{
-						moviesList.length ?
-							(<CardColumns>{ renderCard() }</CardColumns>) :
-							"Loading..."
+						isLoading ? renderLoader() :
+							(<CardColumns>{ renderCard() }</CardColumns>)
+
 					}
 				</Col>
 			</Row>
